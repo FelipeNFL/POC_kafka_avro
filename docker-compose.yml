@@ -1,0 +1,39 @@
+version: '2'
+
+networks:
+  poc:
+    driver: bridge
+
+services:
+  kafka:
+    image: spotify/kafka
+    networks:
+      - poc
+    env_file: ./infra/kafka.env
+    ports:
+      - 2181:2181
+      - 9092:9092
+  schema_registry:
+    build: .
+    tty: true
+    ports:
+      - 5000:5000
+    volumes:
+      - ./:/poc
+    command: bash -c "python3 schema-registry/service.py"
+    networks: 
+      - poc
+    depends_on:
+      - kafka
+  producer_a:
+    build: .
+    tty: true
+    volumes:
+      - ./:/poc
+    command: bash -c "sleep 10 && python3 producer_a.py"
+    networks:
+      - poc
+    depends_on:
+      - schema_registry
+    links:
+      - schema_registry
