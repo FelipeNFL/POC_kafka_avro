@@ -1,15 +1,30 @@
 import io
 import requests
+import json
 from avro.datafile import DataFileWriter
 from kafka import KafkaProducer
 import avro.schema
 
 TOPIC = 'text_to_process'
-VERSION = 'v2'
+VERSION = 'v1'
 
-res = requests.get('http://schema_registry:5000/schema/{}/{}'.format(TOPIC, VERSION))
-schema_json = res.text
-schema_avro = avro.schema.Parse(schema_json)
+schema_text = {
+    "namespace": "poc.avro",
+    "type": "record",
+    "name": "schema_wrong",
+    "fields": [
+        {
+            "name": "version",
+            "type": "string"
+        },
+        {
+            "name": "word",
+            "type": "string"
+        }
+    ]
+}
+
+schema_avro = avro.schema.Parse(json.dumps(schema_text))
 
 producer = KafkaProducer(bootstrap_servers=['kafka:9092'])
 
@@ -28,5 +43,5 @@ def get_binaries(message):
 while True:
 
     text = input('Digite seu texto: ')
-    message = get_binaries({"version": VERSION, "phrase": text})
+    message = get_binaries({"version": VERSION, "word": text})
     producer.send(TOPIC, message)

@@ -25,15 +25,12 @@ services:
       - poc
     depends_on:
       - kafka
-  producer_a:
+  scripts:
     build: .
     tty: true
     volumes:
       - ./:/poc
-    command: bash -c "sleep 10 && python3 producer_a.py"
     networks:
       - poc
     depends_on:
-      - schema_registry
-    links:
       - schema_registry
