@@ -22,4 +22,4 @@ def schema_all():
     return jsonify({'v1': text_to_process_v1, 'v2': text_to_process_v2})
 
 if __name__ == '__main__':
-    app.run(host='schema_registry', port=5000, debug=True)
+    app.run(host='old_schema_registry', port=5000, debug=True)

@@ -14,17 +14,23 @@ services:
       - 2181:2181
       - 9092:9092
   schema_registry:
-    build: .
-    tty: true
-    ports:
-      - 5000:5000
-    volumes:
-      - ./:/poc
-    command: bash -c "python3 schema-registry/service.py"
+    image: confluentinc/cp-schema-registry
     networks: 
-      - poc
+     - poc
+    env_file: ./infra/schema_registry.env
+    ports:
+      - 8081:8081
     depends_on:
       - kafka
+  kafka_rest:
+    image: confluentinc/cp-kafka-rest
+    networks: 
+      - poc
+    env_file: ./infra/kafka_rest.env
+    ports:
+      - 8082:8082
+    depends_on:
+     - kafka
   scripts:
     build: .
     tty: true

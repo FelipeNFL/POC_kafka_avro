@@ -7,7 +7,7 @@ import avro.schema
 TOPIC = 'text_to_process'
 VERSION = 'v2'
 
-res = requests.get('http://schema_registry:5000/schema/{}/{}'.format(TOPIC, VERSION))
+res = requests.get('http://old_schema_registry:5000/schema/{}/{}'.format(TOPIC, VERSION))
 schema_json = res.text
 schema_avro = avro.schema.Parse(schema_json)
 

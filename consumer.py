@@ -34,7 +34,7 @@ def desserialize_avro_message(message):
 
 def get_schemas():
 
-    res = requests.get('http://schema_registry:5000/schema/{}'.format(MY_TOPIC))
+    res = requests.get('http://old_schema_registry:5000/schema/{}'.format(MY_TOPIC))
     schemas = {}
 
     for version, schema in res.json().items():
