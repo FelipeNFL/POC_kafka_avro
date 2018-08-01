@@ -2,3 +2,4 @@ avro-python3
 flask
 kafka-python
 requests
+confluent-kafka[avro]
